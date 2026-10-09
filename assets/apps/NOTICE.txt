@@ -1,0 +1,6 @@
+Client icons identify the corresponding third-party applications.
+Source: the saved reference page supplied by the user (zerofee.ok-exor.ir.zip).
+Raster files are resized PNGs with original metadata removed. The Sing-box
+illustration is an SVG from the same supplied page. Application names and
+artwork remain the property of their respective owners; no affiliation is implied.
+These files are embedded into subscription.css by scripts/sync-assets.cjs.

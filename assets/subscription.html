@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080c12">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>اشتراک شما | Amyrax Panel</title>
+  <link rel="icon" href="/amyrax-assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/amyrax-assets/subscription.css?v=__ASSET_VERSION__">
+  <link rel="stylesheet" href="/amyrax-assets/controls.css?v=__ASSET_VERSION__">
+  <script defer src="/amyrax-assets/controls.js?v=__ASSET_VERSION__"></script>
+  <script id="subscriptionData" type="application/json"><!--SUBSCRIPTION_DATA--></script>
+  <script defer src="/amyrax-assets/vendor/qrcode.js?v=__ASSET_VERSION__"></script>
+  <script defer src="/amyrax-assets/subscription.js?v=__ASSET_VERSION__"></script>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"><span class="ambient-orb orb-blue"></span><span class="ambient-orb orb-violet"></span><span class="ambient-orb orb-cyan"></span></div>
+  <main class="subscription-shell">
+    <header class="brand-header">
+      <a class="brand" href="https://t.me/AmyraxVPN" target="_blank" rel="noopener noreferrer" aria-label="کانال تلگرام AmyraxVPN">
+        <img src="/amyrax-assets/logo.svg" width="44" height="44" alt="">
+        <span dir="ltr">Amyrax <b>Panel</b><small>YOUR CONNECTION, SIMPLIFIED</small></span>
+      </a>
+      <button class="icon-button" id="refreshSubscription" aria-label="به‌روزرسانی اطلاعات" title="به‌روزرسانی اطلاعات"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M6.1 7a7 7 0 0 1 11.6-1L20 9M4 15l2.3 3A7 7 0 0 0 18 17"/></svg></button>
+    </header>
+
+    <section class="glass summary-card" aria-labelledby="subscriptionTitle">
+      <div class="card-eyebrow"><span>اشتراک شما</span><button type="button" class="header-qr-button" data-action="qr-sub-detail" aria-label="نمایش QR لینک اشتراک"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z"/></svg><span>لینک اشتراک</span></button></div>
+      <h1 id="subscriptionTitle" dir="ltr">Amyrax Panel</h1>
+      <p class="intro">یک لینک برای همهٔ اتصال‌های شما.</p>
+      <div id="accountDetails" class="account-details" hidden><span id="accountStatus"></span><span id="accountExpiry"></span></div>
+      <div class="metrics">
+        <div><span>مصرف این ماه</span><strong id="monthUsage">—</strong></div>
+        <div><span>باقی‌ماندهٔ سقف ماهانه</span><strong id="remainingUsage">تعیین نشده</strong></div>
+        <div><span>کانفیگ‌های موجود</span><strong id="nodeCount">—</strong></div>
+        <div><span>آخرین به‌روزرسانی</span><strong id="lastUpdate">—</strong></div>
+      </div>
+      <div class="usage-track" id="usageTrack" hidden><span id="usageProgress"></span></div>
+      <p class="fine-print">مصرف ثبت‌شدهٔ این پنل؛ سقف ماهانه طبق تنظیمات مدیر.</p>
+      <p id="connectionStatus" class="connection-status" role="status" hidden></p>
+      <button class="primary-button" id="copySubscription"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="3"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></svg>کپی لینک اشتراک<span>↗</span></button>
+      <div class="link-preview"><span id="subscriptionHost" dir="ltr"></span><span>تشخیص خودکار اپ</span></div>
+    </section>
+
+    <section class="glass chart-card" aria-labelledby="chartTitle">
+      <div class="section-heading"><h2 id="chartTitle">نمودار مصرف</h2><span class="pill neutral" id="chartTotal">—</span></div>
+      <div class="segmented chart-tabs" aria-label="بازهٔ نمودار"><button type="button" data-period="day" aria-pressed="true">امروز</button><button type="button" data-period="week" aria-pressed="false">۷ روز</button></div>
+      <div id="usageChart" class="usage-chart" role="img" aria-label="نمودار مصرف ثبت‌شده"></div>
+      <p class="chart-caption" id="chartCaption">مصرف به ساعت تهران؛ با عبور ترافیک، نمودار تکمیل می‌شود.</p>
+    </section>
+
+    <div class="segmented main-tabs" role="tablist" aria-label="بخش‌های اشتراک">
+      <button id="appsTab" type="button" role="tab" aria-selected="true" aria-controls="appsPanel" tabindex="0">اپلیکیشن‌ها</button>
+      <button id="configsTab" type="button" role="tab" aria-selected="false" aria-controls="configsPanel" tabindex="-1">کانفیگ‌ها <span id="configBadge" hidden>۰</span></button>
+    </div>
+
+    <section id="appsPanel" role="tabpanel" aria-labelledby="appsTab">
+      <div class="section-lead"><h2>با اپ دلخواه متصل شوید</h2><p>اپ را نصب کنید و لینک اشتراک را در بخش افزودن اشتراک وارد کنید.</p></div>
+      <div class="glass app-platforms" id="appPlatforms"></div>
+      <details class="glass help-card">
+        <summary>اگر اپ به‌صورت خودکار تشخیص داده نشد</summary>
+        <p>بعضی اپ‌ها نام خود را هنگام دریافت اشتراک نمی‌فرستند. قالب مناسب را انتخاب و لینک سازگار را کپی کنید.</p>
+        <label for="manualFormat">قالب خروجی</label>
+        <div class="manual-format"><select data-panel-select id="manualFormat"><option value="clash">FlClash / Clash / Mihomo</option><option value="v2rayng">V2rayNG</option><option value="streisand" disabled>Streisand — Coming soon</option><option value="base64">V2rayN / Shadowrocket</option><option value="singbox">Sing-box JSON</option><option value="raw">لینک‌های مستقیم</option></select><button type="button" id="copyManual" class="soft-button">کپی</button></div>
+      </details>
+    </section>
+
+    <section id="configsPanel" role="tabpanel" aria-labelledby="configsTab" hidden>
+      <div class="section-lead"><h2>کانفیگ‌ها، در دسترس شما</h2><p>همه را یکجا بردارید یا فقط اتصال دلخواهتان را کپی کنید.</p></div>
+      <label class="search-field"><svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg><input type="search" id="configSearch" aria-label="جست‌وجوی کانفیگ" placeholder="جست‌وجوی نام یا پروتکل…" autocomplete="off"></label>
+      <div class="glass config-connections">
+      <div class="config-actions">
+        <div class="action-row"><span class="square-icon teal" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span><div class="action-copy"><h3>لینک اشتراک</h3><p id="shortSubLink" dir="ltr"></p></div><span class="row-actions"><button type="button" class="action-icon-button" data-action="qr-sub" aria-label="کد QR اشتراک" title="نمایش کد QR"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z"/></svg></button><button type="button" class="action-icon-button" data-action="copy-sub" aria-label="کپی لینک اشتراک" title="کپی لینک اشتراک"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span></div>
+        <div class="action-row"><span class="square-icon amber" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span><div class="action-copy"><h3>کپی همه کانفیگ‌ها</h3><p id="copyAllCount"></p></div><button type="button" class="action-icon-button" id="copyAll" aria-label="کپی همهٔ کانفیگ‌ها" title="کپی همهٔ کانفیگ‌ها"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>
+      </div>
+      <div class="config-list" id="configList"></div>
+      </div>
+      <p class="fine-print config-note">پشتیبانی هر کانفیگ به اپ انتخابی شما بستگی دارد.</p>
+    </section>
+
+    <a class="telegram-link" href="https://t.me/AmyraxVPN" target="_blank" rel="noopener noreferrer"><span class="telegram-icon">↗</span><span>همراه امیراکس بمانید<small>خبرها و راهنمای اتصال در کانال تلگرام</small></span><b dir="ltr">@AmyraxVPN</b></a>
+    <footer><span dir="ltr">AMYRAX PANEL</span><span>یک اتصال ساده، یک دنیای بدون مرز.</span></footer>
+    <noscript><p class="glass noscript">برای نمایش کانفیگ‌ها و دکمه‌های کپی، JavaScript را در مرورگر فعال کنید. اپ‌های VPN می‌توانند همین لینک را مستقیماً دریافت کنند.</p></noscript>
+  </main>
+  <dialog id="qrDialog" aria-labelledby="qrTitle"><div class="am-dialog-scroll">
+    <h2 id="qrTitle">لینک اشتراک</h2>
+    <div id="qrCanvas" role="img" aria-label="کد QR"></div>
+    <div class="qr-link-row" id="qrLinkRow" hidden><span id="qrValue" dir="ltr"></span><button type="button" class="action-icon-button" id="copyQrText" aria-label="کپی لینک اشتراک"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>
+    <button type="button" class="qr-close" id="closeQr" aria-label="بستن کد QR">بستن</button>
+  </div></dialog>
+  <div id="subscriptionToast" class="toast" role="status" aria-live="polite"></div>
+  <dialog id="importDialog" aria-labelledby="importTitle" aria-describedby="importHelp"><div class="am-dialog-scroll">
+    <div class="dialog-header"><h2 id="importTitle">افزودن اشتراک</h2><button type="button" class="icon-button" id="closeImport" aria-label="بستن راهنمای افزودن اشتراک">×</button></div>
+    <p id="importHelp"></p>
+    <label class="qr-value"><span class="sr-only">لینک سازگار با اپ</span><input id="importLink" type="text" dir="ltr" readonly></label>
+    <div class="import-help-actions"><button type="button" class="soft-button" id="copyImportLink">کپی لینک اشتراک</button><a class="soft-button" id="importDownload" download>دانلود پروفایل</a></div>
+    <code id="importCommand" dir="ltr" hidden>sudo sing-box run -c Amyrax-SingBox.json</code>
+  </div></dialog>
+</body>
+</html>

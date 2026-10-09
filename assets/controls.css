@@ -1,0 +1,67 @@
+
+.am-dropdown,.am-select-popup{--control-bg:var(--card-bg,var(--card,#121a25));--control-field:var(--field,#0e1621);--control-text:var(--text-white,var(--text,#eef3f8));--control-muted:var(--text-muted,var(--muted,#9ba9bc));--control-line:var(--border,var(--line,#25303e));--control-accent:var(--primary-red,var(--accent,#38c9ad));font-family:var(--font-family,Vazir,Arial,sans-serif);box-sizing:border-box;direction:rtl}
+.am-dropdown{min-width:0;max-width:100%}
+.am-select-trigger{display:flex;align-items:center;gap:10px;width:100%;min-height:46px;padding:10px 13px;border:1px solid var(--control-line);border-radius:12px;background:var(--control-field);color:var(--control-text);font:inherit;font-size:13px;line-height:1.8;text-align:start;cursor:pointer;transition:background .16s,border-color .16s;box-sizing:border-box}
+.am-select-caption{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.am-select-trigger svg,.am-select-option svg{width:18px;height:18px;flex:0 0 18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.am-select-trigger>svg{color:var(--control-muted)}
+.am-select-trigger>svg:last-child{width:16px;height:16px;flex-basis:16px;transition:transform .16s}
+.am-select-trigger[aria-expanded=true]{border-color:var(--control-accent);background:var(--control-bg)}
+.am-select-trigger[aria-expanded=true]>svg:last-child{transform:rotate(180deg);color:var(--control-accent)}
+.am-select-trigger:focus-visible{outline:2px solid var(--control-accent);outline-offset:3px}
+.am-select-trigger:disabled{opacity:.5;cursor:default}
+.am-select-popup{position:fixed;inset:auto;margin:0;padding:7px;border:1px solid var(--control-line);border-radius:16px;background:var(--control-bg);color:var(--control-text);box-shadow:0 12px 32px #0005,inset 0 1px 0 #ffffff08;z-index:12000;display:flex;flex-direction:column;overflow:hidden;max-width:calc(100vw - 24px)}
+.am-select-options{min-height:0;overflow:auto;overscroll-behavior:contain;border-radius:9px;padding:1px;--scroll-track:transparent}
+.am-select-popup[hidden],select[data-themed=true]{display:none!important}
+.am-select-option{display:flex;align-items:center;gap:11px;width:100%;min-height:44px;box-sizing:border-box;margin:0;padding:9px 11px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--control-text);font:inherit;font-size:13px;font-weight:400;line-height:1.8;text-align:start;cursor:pointer;outline:none}
+.am-option-caption{flex:1;min-width:0;overflow-wrap:anywhere;unicode-bidi:plaintext}
+.am-select-option>svg{color:var(--control-muted)}
+.am-select-option[role=option]>svg{visibility:hidden;color:var(--control-accent)}
+.am-select-option[aria-selected=true]{color:var(--control-accent);background:#38c9ad12}
+.am-select-option[aria-selected=true]>svg{visibility:visible}
+.am-select-option:focus{background:#38c9ad16;border-color:#38c9ad55;color:var(--control-accent)}
+.am-select-option:focus>svg{color:inherit}
+.am-select-option.am-option-danger{color:#f4a697;border-top-color:var(--control-line);border-radius:0 0 10px 10px;margin-top:5px;padding-top:12px}
+.am-select-option.am-option-danger>svg{color:inherit}
+.am-select-option.am-option-danger:focus{background:#ed8e7014;border-color:#ed8e7055;border-radius:10px}
+.am-select-option[aria-disabled=true]{opacity:.45;cursor:default}
+.users-toolbar>.am-dropdown{min-width:200px}
+.user-actions.am-dropdown{padding:0;border:0;background:none;margin:0;flex-shrink:0}
+.user-actions .am-select-trigger{width:44px;height:44px;min-height:44px;padding:12px;justify-content:center;border-radius:10px}
+.user-actions .am-select-caption,.user-actions .am-select-trigger>svg:last-child{display:none}
+.user-actions .am-select-trigger>svg:first-child{stroke-width:3}
+.manual-format>.am-dropdown{flex:1}
+.manual-format .am-select-caption{direction:ltr;text-align:left;font-size:12px}
+@media(hover:hover){.am-select-trigger:not(:disabled):hover{border-color:var(--control-accent);background:var(--control-bg)}.am-select-option:not([aria-disabled=true]):hover{background:#38c9ad12;color:var(--control-accent)}.am-select-option.am-option-danger:hover{background:#ed8e7014;color:#ffb8a9}}
+@media(max-width:650px){.am-select-trigger,.am-select-option{min-height:48px}.users-toolbar>.am-dropdown{width:100%;min-width:0}.am-select-popup{border-radius:14px}}
+@media(prefers-reduced-motion:reduce){.am-select-trigger,.am-select-trigger>svg:last-child{transition:none}}
+
+
+@media (forced-colors:none){
+  :root{--scroll-track:var(--bg-color,var(--bg,#0c111a));--scroll-thumb:#2c8274;--scroll-hover:var(--primary-red,var(--accent,#38c9ad))}
+  @supports (color:color-mix(in srgb,black,white)){
+    :root{--scroll-thumb:color-mix(in srgb,var(--scroll-hover) 55%,var(--card-bg,var(--card,#121a25)))}
+  }
+  *{scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) var(--scroll-track)}
+  
+  @supports selector(::-webkit-scrollbar){
+    *{scrollbar-width:auto;scrollbar-color:auto}
+    ::-webkit-scrollbar{width:10px;height:10px}
+    ::-webkit-scrollbar-track{background:var(--scroll-track);border-radius:999px}
+    ::-webkit-scrollbar-thumb{background:var(--scroll-thumb);background-clip:padding-box;border:2px solid transparent;border-radius:999px;min-height:36px;min-width:36px}
+    ::-webkit-scrollbar-thumb:hover,::-webkit-scrollbar-thumb:active{background-color:var(--scroll-hover)}
+    ::-webkit-scrollbar-button{display:none;width:0;height:0}
+    ::-webkit-scrollbar-corner{background:var(--scroll-track)}
+    @media(pointer:coarse){::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{border-width:1px}}
+  }
+}
+
+
+.am-dialog-scroll,.user-dialog>form,.cinema-modal-scroll{min-height:0;overflow:auto;overscroll-behavior:contain;--scroll-track:transparent;border-radius:16px}
+.user-dialog textarea,.usage-table-wrap{--scroll-track:transparent}
+@supports selector(::-webkit-scrollbar){
+  .am-select-options::-webkit-scrollbar-track{margin-block:5px}
+  .am-dialog-scroll::-webkit-scrollbar-track,.user-dialog>form::-webkit-scrollbar-track,.cinema-modal-scroll::-webkit-scrollbar-track{margin-block:10px}
+  .user-dialog textarea::-webkit-scrollbar-track{margin-block:8px}
+  .usage-table-wrap::-webkit-scrollbar-track{margin-inline:10px}
+}

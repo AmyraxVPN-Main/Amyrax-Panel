@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080f17">
+  <meta name="description" content="آموزش فارسی نصب Amyrax Panel روی Bot-Hosting، ساخت کاربر و افزودن اشتراک به اپ‌ها.">
+  <title>آموزش راه‌اندازی | Amyrax Panel</title>
+  <link rel="icon" href="media/logo.svg" type="image/svg+xml">
+  <style>
+    @font-face{font-family:Vazir;src:url(media/fonts/Vazir.woff2) format('woff2');font-display:swap}
+    @font-face{font-family:Vazir;src:url(media/fonts/Vazir-Bold.woff2) format('woff2');font-weight:700;font-display:swap}
+    @font-face{font-family:Plasma;src:url(media/fonts/Plasma-Circle-Dots.ttf) format('truetype');font-display:swap}
+    :root{color-scheme:dark;--bg:#080f17;--surface:#111b28;--line:#ffffff14;--text:#e5eef4;--muted:#94a8b9;--accent:#67e6c8}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:15px/1.9 Vazir,Arial,sans-serif;color:var(--text);background:radial-gradient(ellipse at 90% 0,#18377055,transparent 45%),radial-gradient(ellipse at 0 65%,#0d66513a,transparent 45%),var(--bg)}a{color:inherit;text-decoration:none}a:focus-visible,video:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:5px}h1,h2,h3,p{margin:0}button,a,summary{-webkit-tap-highlight-color:transparent}.shell{max-width:1130px;margin:auto;padding:24px 24px 40px}header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:44px}.brand{display:flex;align-items:center;gap:12px;direction:ltr;font:700 19px Arial,sans-serif}.brand img{width:42px;height:42px}.brand span{color:var(--accent)}.nav{display:flex;gap:22px;color:var(--muted);font-size:13px}.nav a:hover{color:var(--accent)}.intro{display:grid;grid-template-columns:1.5fr 1fr;gap:45px;align-items:center;margin-bottom:30px}.eyebrow{font-family:Plasma,Vazir,sans-serif;font-size:22px;color:var(--accent);display:block;margin-bottom:12px}h1{font-size:clamp(30px,4vw,46px);line-height:1.6;letter-spacing:-1px}.lead{color:var(--muted);max-width:560px;margin-top:12px;font-size:15px}.facts{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}.facts span{border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12px;color:#bed0dc;background:#ffffff04}.note{border:1px solid var(--line);border-radius:22px;padding:22px;background:#111c29d9}.note small{color:var(--accent)}.note h2{font-size:17px;margin:6px 0 10px}.note p{font-size:13px;color:var(--muted)}.note a{display:inline-flex;color:var(--accent);font-weight:700;margin-top:14px}.video-card{background:#111923;border:1px solid #3d555b;border-radius:26px;overflow:hidden;box-shadow:0 24px 65px #0004}.video-card video{display:block;width:100%;aspect-ratio:16/9;background:#060a0f}.video-meta{padding:19px 23px;display:flex;align-items:center;justify-content:space-between;gap:16px}.video-meta strong{display:block;font-size:16px}.video-meta small{display:block;color:var(--muted);font-size:12px;margin-top:4px}.button{display:inline-flex;align-items:center;justify-content:center;gap:9px;white-space:nowrap;min-height:44px;padding:9px 19px;border:1px solid #5de3c649;border-radius:12px;background:#65dfbc13;color:var(--accent);font-size:13px;font-weight:700}.button:hover{background:#65dfbc22}.section-title{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:42px 0 18px}h2{font-size:23px}.section-title span{color:var(--muted);font-size:12px}.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.step{min-width:0;border:1px solid var(--line);border-radius:18px;background:linear-gradient(150deg,#ffffff05,transparent 65%),#101b28;padding:21px}.number{display:block;direction:ltr;text-align:right;font:700 30px Arial,sans-serif;color:#5ce1bd77;margin-bottom:22px}.step h3{font-size:15px;margin-bottom:9px}.step p{color:var(--muted);font-size:12px}.step code,details code{font:12px/1.6 Consolas,monospace;color:#b4eddf;background:#66ddbb0d;padding:2px 5px;border-radius:4px;direction:ltr;unicode-bidi:embed;overflow-wrap:anywhere}.feature-line{display:flex;align-items:center;gap:12px;margin-top:18px;color:var(--muted);font-size:13px;border:1px solid var(--line);background:#101b2844;border-radius:14px;padding:16px}.feature-line b{color:var(--accent);white-space:nowrap}.faq{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}details{border:1px solid var(--line);border-radius:15px;background:#101b28;padding:0 18px;min-width:0}summary{font-size:13px;padding:17px 0;cursor:pointer;font-weight:700}details p{padding-bottom:18px;color:var(--muted);font-size:13px}details[open]{border-color:#4ebba84d}.end-card{margin-top:36px;border:1px solid #68dbbd35;border-radius:20px;padding:25px;display:flex;justify-content:space-between;align-items:center;gap:20px;background:linear-gradient(120deg,#4c9bac0c,#58d8b518)}.end-card h2{font-size:21px}.end-card p{color:var(--muted);font-size:13px;margin-top:5px}.footer{display:flex;justify-content:space-between;gap:18px;margin-top:30px;color:#73909f;font-size:11px}.footer a{color:#95b9c5}
+    @media(max-width:800px){.shell{padding:20px 17px 30px}header{margin-bottom:28px}.nav{gap:14px}.intro{grid-template-columns:1fr;gap:22px}.note{padding:18px}.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.number{margin-bottom:14px}.faq{grid-template-columns:1fr}.end-card{align-items:flex-start}.section-title span{display:none}}
+    @media(max-width:440px){.brand{font-size:16px;gap:8px}.brand img{width:34px;height:34px}.nav a:first-child{display:none}.nav{font-size:12px;gap:12px}h1{font-size:30px}.video-card{border-radius:18px}.video-meta{padding:15px;align-items:flex-start;flex-direction:column}.video-meta .button{width:100%}.steps{grid-template-columns:1fr}.number{font-size:26px;margin-bottom:10px}.step{padding:18px}.feature-line{align-items:flex-start;flex-direction:column}.end-card{flex-direction:column}.end-card .button{width:100%}.footer{flex-direction:column;gap:8px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <a class="brand" href="https://t.me/AmyraxVPN" target="_blank" rel="noopener noreferrer"><img src="media/logo.svg" alt=""><strong>Amyrax <span>Panel</span></strong></a>
+      <nav class="nav" aria-label="راهنمای صفحه"><a href="#video">ویدئو</a><a href="#installation">نصب</a><a href="#faq">سؤال‌ها</a></nav>
+    </header>
+    <section class="intro">
+      <div><span class="eyebrow">آموزش راه‌اندازی</span><h1>از هاست تا اولین اتصال.</h1><p class="lead">Amyrax Panel را راه‌اندازی کن، کاربر بساز و یک لینک اشتراک سازگار با دستگاهت تحویل بگیر. تمام مراحل اصلی در این آموزش فارسی آمده‌اند.</p><div class="facts"><span>۱ دقیقه و ۵۲ ثانیه</span><span>Node.js</span><span>آموزش فارسی</span></div></div>
+      <aside class="note"><small>هاست استفاده‌شده در ویدئو</small><h2 dir="ltr">Bot-Hosting</h2><p>برای دنبال‌کردن آموزش، یک سرویس Node.js آماده کن. هزینه، منابع و شرایط استفاده را از سایت هاست بررسی کن.</p><a href="https://bot-hosting.net/" target="_blank" rel="noopener noreferrer">رفتن به Bot-Hosting ↗</a></aside>
+    </section>
+    <section class="video-card" id="video" aria-label="آموزش ویدئویی نصب پنل">
+      <video controls playsinline preload="metadata" poster="media/tutorial-cover.png" aria-label="ویدئوی فارسی راه‌اندازی Amyrax Panel" tabindex="0"><source src="media/setup.mp4" type="video/mp4"><p>مرورگر امکان نمایش ویدئو را ندارد؛ <a href="media/setup.mp4">فایل آموزش را باز کنید</a>.</p></video>
+      <div class="video-meta"><div><strong>آموزش نصب و اولین اشتراک</strong><small>فایل کامل ویدئو داخل پروژه است؛ برای شروع، پخش را بزن.</small></div><a class="button" href="media/setup.mp4" download="Amyrax-Setup.mp4">دریافت ویدئو ↓</a></div>
+    </section>
+    <section id="installation">
+      <div class="section-title"><h2>چهار قدم تا شروع</h2><span>فایل‌ها، اجرا، ورود، اتصال</span></div>
+      <div class="steps">
+        <article class="step"><span class="number">01</span><h3>هاست را آماده کن</h3><p>سرویس Node.js بساز. آموزش با Node.js 24 ضبط شده است؛ پنل به نسخهٔ 18 یا جدیدتر و امکان دریافت بسته‌ها نیاز دارد.</p></article>
+        <article class="step"><span class="number">02</span><h3>فایل‌ها را استخراج کن</h3><p>بسته را در File Manager آپلود و Extract کن. فایل‌های <code>index.js</code> و <code>package.json</code> باید در پوشهٔ اصلی باشند.</p></article>
+        <article class="step"><span class="number">03</span><h3>پنل را روشن کن</h3><p>فایل اجرا را <code>index.js</code> انتخاب کن. پورت اختصاصی هاست را تنظیم کن و آدرس پنل را از کنسول بردار. در اولین ورود رمز بساز.</p></article>
+        <article class="step"><span class="number">04</span><h3>اولین کاربر را بساز</h3><p>نام، حجم و مدت اعتبار را وارد کن. مقدار صفر یعنی نامحدود. لینک اشتراک کاربر را در اپ دستگاه خودت اضافه کن.</p></article>
+      </div>
+      <p class="feature-line"><b>اپ پیشنهادی</b><span>Windows: FlClash · Android: sing-box و FlClash · iPhone: sing-box MT</span></p>
+    </section>
+    <section id="faq">
+      <div class="section-title"><h2>اگر جایی گیر کردی</h2><span>پاسخ کوتاه به خطاهای رایج</span></div>
+      <div class="faq">
+        <details><summary>فایل index.js پیدا نمی‌شود.</summary><p>ZIP را استخراج کن و فایل‌ها را در پوشهٔ اصلی سرویس قرار بده. در Bot-Hosting فایل اجرا معمولاً باید در <code>/home/container/index.js</code> باشد. پوشهٔ اضافی داخل فایل‌ها و نام Startup را بررسی کن.</p></details>
+        <details><summary>نصب‌کننده خطای Permission denied می‌دهد.</summary><p>خطای مسیر <code>/mnt/install/install.sh</code> مربوط به نصب‌کنندهٔ هاست است. این فایل در بستهٔ پنل نیست؛ اگر نصب مجدد هم همین خطا را دارد، پشتیبانی هاست باید دسترسی‌ها را بررسی کند.</p></details>
+        <details><summary>اپ لینک اشتراک را قبول نمی‌کند.</summary><p>لینک را در مرورگر همان دستگاه باز کن و قالب مخصوص اپ را از صفحهٔ اشتراک بگیر. برای V2rayNG با لینک HTTP، بعضی نسخه‌ها به گزینهٔ Allow insecure URL نیاز دارند. Streisand فعلاً Coming soon است.</p></details>
+        <details><summary>چرا تعداد کانفیگ‌ها در اپ‌ها متفاوت است؟</summary><p>هر اپ فقط روش‌های سازگار را می‌گیرد. فهرست پیش‌فرض با IP یازده مورد است؛ FlClash چهار و sing-box نه مورد سازگار دریافت می‌کنند.</p></details>
+        <details><summary>آیا با به‌روزرسانی کاربران پاک می‌شوند؟</summary><p>از کاربران پشتیبان بگیر و پوشهٔ داده‌های فعلی را حفظ کن. هنگام به‌روزرسانی کد، فایل‌های auth.json، state.json، users.json و traffic.json را حذف یا جایگزین نکن.</p></details>
+        <details><summary>سرعت روی همهٔ اینترنت‌ها تضمین می‌شود؟</summary><p>انتخاب خودکار بر اساس تأخیر به پیدا‌کردن مسیر مناسب کمک می‌کند. سرعت نهایی به اینترنت کاربر، کیفیت سرور، ازدحام و محدودیت‌های شبکه وابسته است.</p></details>
+      </div>
+    </section>
+    <aside class="end-card"><div><h2>آموزش‌ها و خبرهای Amyrax</h2><p>راهنمای اتصال و خبرهای پنل را در کانال دنبال کن.</p></div><a class="button" href="https://t.me/AmyraxVPN" target="_blank" rel="noopener noreferrer" dir="ltr">@AmyraxVPN ↗</a></aside>
+    <footer class="footer"><span dir="ltr">AMYRAX PANEL · SETUP GUIDE</span><a href="https://bot-hosting.net/" target="_blank" rel="noopener noreferrer">هاست آموزش: Bot-Hosting</a></footer>
+  </main>
+</body>
+</html>

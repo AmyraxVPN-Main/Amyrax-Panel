@@ -1,0 +1,21 @@
+{
+  "name": "amyrax-panel",
+  "version": "1.11.4",
+  "description": "Amyrax Panel - multi-protocol proxy and web panel | https://t.me/AmyraxVPN",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build:assets": "node scripts/sync-assets.cjs"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "express": "^4.21.0",
+    "ws": "^8.22.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "author": "Amyrax Panel",
+  "license": "MIT",
+  "homepage": "https://t.me/AmyraxVPN"
+}
