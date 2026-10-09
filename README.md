@@ -54,13 +54,13 @@
 
 ویدئوی زیر راه‌اندازی پنل روی **[Bot-Hosting](https://bot-hosting.net/)**، ورود به پنل، ساخت کاربر و استفاده از اشتراک را نشان می‌دهد.
 
-<a href="docs/media/setup.mp4"><img src="docs/media/tutorial-cover.png" alt="تماشای آموزش فارسی راه‌اندازی Amyrax Panel روی Bot-Hosting؛ ۱ دقیقه و ۵۲ ثانیه" width="100%"></a>
+<a href="https://amyraxvpn-main.github.io/Amyrax-Panel/#video"><img src="docs/media/tutorial-cover.png" alt="تماشای آموزش فارسی راه‌اندازی Amyrax Panel روی Bot-Hosting؛ ۱ دقیقه و ۵۲ ثانیه" width="100%"></a>
 
-**[▶ تماشای ویدئو](docs/media/setup.mp4)** · **[کانال آموزش و خبرها](https://t.me/AmyraxVPN)**
+**[▶ تماشای آنلاین ویدئو](https://amyraxvpn-main.github.io/Amyrax-Panel/#video)** · **[فایل ویدئو](docs/media/setup.mp4)** · **[کانال آموزش و خبرها](https://t.me/AmyraxVPN)**
 
 مدت: **۱:۵۲** · زبان: **فارسی** · فایل ویدئو داخل همین پروژه قرار دارد.
 
-[صفحهٔ آموزش با پخش‌کنندهٔ ویدئو](docs/index.html) برای اجرای محلی یا انتشار روی GitHub Pages هم آماده است.
+[صفحهٔ آموزش با پخش‌کنندهٔ ویدئو](https://amyraxvpn-main.github.io/Amyrax-Panel/) روی GitHub Pages منتشر می‌شود. فایل [صفحهٔ آموزش محلی](docs/index.html) هم داخل پروژه است.
 
 <details>
 <summary><strong>برای صاحب مخزن: پخش ویدئو در خود صفحهٔ README</strong></summary>

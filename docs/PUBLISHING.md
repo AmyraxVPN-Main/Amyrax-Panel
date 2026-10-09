@@ -2,6 +2,9 @@
 
 <div dir="rtl">
 
+صفحهٔ آموزش: **[https://amyraxvpn-main.github.io/Amyrax-Panel/](https://amyraxvpn-main.github.io/Amyrax-Panel/)**
+
+
 README، تیتر متحرک، کاور و ویدئو از مسیرهای داخل همین پروژه استفاده می‌کنند. پوشهٔ `docs` را همراه `README.md` و فایل‌های کد در ریشهٔ مخزن قرار دهید. برای آماده‌کردن بستهٔ انتشار، می‌توانید از `scripts/package-github.py` استفاده کنید.
 
 <h2 align="center" dir="rtl">پخش مستقیم در صفحهٔ README</h2>
