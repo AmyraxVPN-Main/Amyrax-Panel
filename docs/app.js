@@ -1,6 +1,6 @@
 (() => {
   const root = document.documentElement;
-  const notice = document.querySelector('[role="status"]');
+  const notice = document.querySelector('.toast[role="status"]');
   let noticeTimer;
   function notify(message) {
     notice.textContent = message;
@@ -21,6 +21,33 @@
     applyTheme(theme);
     try { localStorage.setItem('amyrax-guide-theme', theme); } catch {}
   });
+  const supportNotice = document.querySelector('#support-notice');
+  function dismissSupportNotice() {
+    const hadFocus = supportNotice.contains(document.activeElement);
+    supportNotice.hidden = true;
+    if (hadFocus) document.querySelector('.brand').focus({ preventScroll: true });
+  }
+  supportNotice.querySelectorAll('[data-dismiss-support]').forEach(button => {
+    button.addEventListener('click', dismissSupportNotice);
+  });
+  supportNotice.querySelector('a').addEventListener('click', dismissSupportNotice);
+  supportNotice.hidden = false;
+  const setupVideo = document.querySelector('#setup-video');
+  const videoStart = document.querySelector('#video-start');
+  videoStart.hidden = false;
+  setupVideo.controls = false;
+  setupVideo.addEventListener('play', () => {
+    videoStart.hidden = true;
+    setupVideo.controls = true;
+  });
+  videoStart.addEventListener('click', async () => {
+    videoStart.hidden = true;
+    setupVideo.controls = true;
+    setupVideo.focus({ preventScroll: true });
+    try { await setupVideo.play(); } catch {
+      notify('برای پخش، دکمهٔ پخش روی ویدئو را بزن.');
+    }
+  });
   const menuButton = document.querySelector('#menu-toggle');
   const menu = document.querySelector('#site-nav');
   menuButton.addEventListener('click', () => {
@@ -34,12 +61,67 @@
     menuButton.setAttribute('aria-label', 'بازکردن منو');
   }));
   document.addEventListener('keydown', event => {
+    if (document.querySelector('#image-viewer')?.open) return;
     if (event.key === 'Escape') {
+      if (!supportNotice.hidden) dismissSupportNotice();
       menu.classList.remove('open');
       menuButton.setAttribute('aria-expanded', 'false');
       menuButton.setAttribute('aria-label', 'بازکردن منو');
     }
   });
+  const imageViewer = document.querySelector('#image-viewer');
+  const viewerImage = document.querySelector('#viewer-image');
+  const viewerCaption = document.querySelector('#viewer-caption');
+  const imageLinks = [...document.querySelectorAll('.image-zoom')];
+  let imageIndex = 0;
+  let imageOpener;
+  let previousOverflow;
+  function displayImage(index) {
+    imageIndex = (index + imageLinks.length) % imageLinks.length;
+    const link = imageLinks[imageIndex];
+    const image = link.querySelector('img');
+    viewerImage.src = link.href;
+    viewerImage.alt = image.alt;
+    viewerCaption.textContent = link.closest('.step-view')?.querySelector('h3').textContent || 'صفحهٔ اشتراک Amyrax Panel';
+    viewerCaption.setAttribute('aria-live', 'polite');
+  }
+  imageLinks.forEach((link, index) => link.addEventListener('click', event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || typeof imageViewer.showModal !== 'function') return;
+    event.preventDefault();
+    imageOpener = link;
+    previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    displayImage(index);
+    imageViewer.showModal();
+  }));
+  imageViewer.querySelector('.viewer-close').addEventListener('click', () => imageViewer.close());
+  imageViewer.querySelector('.viewer-previous').addEventListener('click', () => displayImage(imageIndex - 1));
+  imageViewer.querySelector('.viewer-next').addEventListener('click', () => displayImage(imageIndex + 1));
+  imageViewer.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      displayImage(imageIndex + (event.key === 'ArrowRight' ? 1 : -1));
+    }
+  });
+  imageViewer.addEventListener('click', event => {
+    if (event.target === imageViewer) imageViewer.close();
+  });
+  imageViewer.addEventListener('close', () => {
+    document.body.style.overflow = previousOverflow;
+    if (imageOpener?.isConnected) imageOpener.focus({ preventScroll: true });
+  });
+  let swipeStart;
+  imageViewer.addEventListener('pointerdown', event => {
+    swipeStart = event.pointerType === 'touch' && event.isPrimary ? { x: event.clientX, y: event.clientY } : null;
+  });
+  imageViewer.addEventListener('pointerup', event => {
+    if (!swipeStart) return;
+    const dx = event.clientX - swipeStart.x;
+    const dy = event.clientY - swipeStart.y;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 2) displayImage(imageIndex + (dx < 0 ? 1 : -1));
+    swipeStart = null;
+  });
+  imageViewer.addEventListener('pointercancel', () => { swipeStart = null; });
   document.querySelectorAll('.copy-button').forEach(button => button.addEventListener('click', async () => {
     const text = button.parentElement.querySelector('code').textContent;
     try {

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <radialGradient id="glow"><stop stop-color="#a2c2a6" stop-opacity=".08"/><stop offset="1" stop-color="#a2c2a6" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="#1a1f25"/>
+  <ellipse cx="800" cy="410" rx="680" ry="540" fill="url(#glow)"/>
+  <rect x="32" y="32" width="1536" height="836" rx="24" fill="none" stroke="#a2c2a6" stroke-opacity=".13"/>
+  <text x="800" y="400" text-anchor="middle" fill="#e4eae6" font-family="Arial,sans-serif" font-size="54" font-weight="700" letter-spacing="5">AMYRAX PANEL</text>
+  <text x="800" y="465" text-anchor="middle" fill="#a2c2a6" font-family="Arial,sans-serif" font-size="20" letter-spacing="5">SETUP TUTORIAL</text>
+  <text x="800" y="555" text-anchor="middle" fill="#a7b2ac" font-family="Arial,sans-serif" font-size="18" letter-spacing="2">BOT-HOSTING · 01:52 · PERSIAN</text>
+</svg>
