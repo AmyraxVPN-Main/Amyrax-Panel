@@ -13,13 +13,14 @@
   <img src="docs/media/badge-version.svg" alt="نسخهٔ 1.11.8">
   <img src="docs/media/badge-node.svg" alt="Node.js 18 یا جدیدتر">
   <a href="https://t.me/AmyraxVPN"><img src="docs/media/badge-channel.svg" alt="کانال تلگرام AmyraxVPN"></a>
-  <a href="https://www.vortexa.cloud/"><img src="docs/media/badge-host.svg" alt="هاست پیشنهادی: Vortexa Cloud"></a>
+  <a href="https://www.vortexa.cloud/"><img src="docs/media/badge-host.svg" alt="هاست پیشنهادی: Vortexa Cloud؛ IP آلمان"></a>
+  <a href="https://velohost.xyz/"><img src="docs/media/badge-host-velohost.svg" alt="هاست پیشنهادی: Velohost؛ IP آمریکا"></a>
 </p>
 
 
 <p><a href="https://amyraxvpn-main.github.io/Amyrax-Panel/"><img src="docs/media/open-guide.svg" alt="ورود به سایت Amyrax Panel؛ معرفی، آموزش، ویدئو و راهنمای کامل" width="420"></a></p>
 <p><a href="https://amyraxvpn-main.github.io/Amyrax-Panel/"><strong>معرفی کامل، آموزش نصب، ویدئو و راهنما ←</strong></a></p>
-<p dir="rtl">هاست پیشنهادی: <a href="https://www.vortexa.cloud/"><strong>Vortexa Cloud</strong></a>؛ هنگام ساخت سرور، <bdi>Node.js</bdi> را انتخاب کنید تا سرور با اعتبار یک‌ساله ساخته شود. مراحل نصب پنل مانند آموزش است.</p>
+<p dir="rtl">هاست‌های پیشنهادی: <a href="https://www.vortexa.cloud/"><strong>Vortexa Cloud</strong></a> با IP آلمان و <a href="https://velohost.xyz/"><strong>Velohost</strong></a> با IP آمریکا. برای اجرای پنل، سرویس <bdi>Node.js</bdi> را انتخاب کنید و مراحل آموزش نصب را دنبال کنید. در Vortexa سرور با اعتبار یک‌ساله ساخته می‌شود.</p>
 </div>
 
 ---
