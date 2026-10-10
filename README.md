@@ -13,12 +13,13 @@
   <img src="docs/media/badge-version.svg" alt="نسخهٔ 1.11.8">
   <img src="docs/media/badge-node.svg" alt="Node.js 18 یا جدیدتر">
   <a href="https://t.me/AmyraxVPN"><img src="docs/media/badge-channel.svg" alt="کانال تلگرام AmyraxVPN"></a>
-  <a href="https://bot-hosting.net/"><img src="docs/media/badge-host.svg" alt="هاست استفاده‌شده در آموزش: Bot-Hosting"></a>
+  <a href="https://www.vortexa.cloud/"><img src="docs/media/badge-host.svg" alt="هاست پیشنهادی: Vortexa Cloud"></a>
 </p>
 
 
 <p><a href="https://amyraxvpn-main.github.io/Amyrax-Panel/"><img src="docs/media/open-guide.svg" alt="ورود به سایت Amyrax Panel؛ معرفی، آموزش، ویدئو و راهنمای کامل" width="420"></a></p>
 <p><a href="https://amyraxvpn-main.github.io/Amyrax-Panel/"><strong>معرفی کامل، آموزش نصب، ویدئو و راهنما ←</strong></a></p>
+<p dir="rtl">هاست پیشنهادی: <a href="https://www.vortexa.cloud/"><strong>Vortexa Cloud</strong></a>؛ هنگام ساخت سرور، <bdi>Node.js</bdi> را انتخاب کنید تا سرور با اعتبار یک‌ساله ساخته شود. مراحل نصب پنل مانند آموزش است.</p>
 </div>
 
 ---
