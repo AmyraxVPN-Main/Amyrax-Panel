@@ -1,5 +1,5 @@
 async function amyraxRequestJson(url, options = {}) {
-  const { timeoutMs = 20000, signal, ...settings } = options;
+  const { timeoutMs = 30000, signal, ...settings } = options;
   const method = String(settings.method || 'GET').toUpperCase(), readOnly = method === 'GET';
   const controller = new AbortController();
   let timedOut = false;
@@ -139,12 +139,19 @@ function applyTheme(theme) {
   const toggleBtn = document.getElementById('themeToggleBtn');
   const toggleLabel = document.getElementById('themeToggleLabel');
   if (toggleBtn) {
+    const nextThemeLabel = isCozy ? 'فعال‌کردن تم تیره' : 'فعال‌کردن تم گرم';
     toggleBtn.setAttribute('data-theme', targetTheme);
     toggleBtn.setAttribute('aria-pressed', isCozy ? 'true' : 'false');
+    toggleBtn.setAttribute('aria-label', nextThemeLabel);
+    toggleBtn.setAttribute('title', nextThemeLabel);
     toggleBtn.classList.toggle('is-cozy', isCozy);
+    const icon = toggleBtn.querySelector('svg');
+    if (icon) icon.innerHTML = isCozy
+      ? '<path d="M20.9 13a9 9 0 0 1-9.9-9.9A9 9 0 1 0 20.9 13Z"/>'
+      : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/>';
   }
   if (toggleLabel) {
-    toggleLabel.textContent = isCozy ? 'Cozy' : 'Dark';
+    toggleLabel.textContent = isCozy ? 'تم گرم' : 'تم تیره';
   }
 }
 
@@ -449,6 +456,7 @@ async function loadGateData() {
     if (openPage && unifiedUrl) openPage.href = unifiedUrl;
 
     renderNodes(data.nodes, locationStr);
+    if (!data.network?.checkedAt) refreshAmyraxNetwork();
 
   } catch (err) {
     console.error('Failed to load gate status:', err);
@@ -507,15 +515,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   async function load(){
     if(loading)return;loading=true;
-    try{render(await amyraxRequestJson(prefix+'/api/traffic',{timeoutMs:6000}));}
+    try{render(await amyraxRequestJson(prefix+'/api/traffic',{timeoutMs:15000}));}
     catch(_){for(const id of ['usageLiveUp','usageLiveDown','overviewUp','overviewDown'])amyraxSet(id,'—');amyraxSet('trafficUpdated','دریافت آمار ناموفق؛ اعداد قبلی به‌روز نیستند.');}
     finally{loading=false;}
   }
-  const active=()=>document.visibilityState==='visible'&&($('viewHome')?.classList.contains('active')||$('viewUsage')?.classList.contains('active'));
-  setInterval(()=>{if(active())load();},2000);
+  const active=()=>navigator.onLine!==false&&document.visibilityState==='visible'&&($('viewHome')?.classList.contains('active')||$('viewUsage')?.classList.contains('active'));
+  setInterval(()=>{if(active())load();},5000);
   window.addEventListener('hashchange',()=>{if(active())load();});
   document.addEventListener('visibilitychange',()=>{if(active())load();});
   window.addEventListener('amyrax-refresh',load);
+  window.addEventListener('online',()=>{if(active())load();});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);else load();
 })();
 
@@ -607,7 +616,7 @@ function updateAmyraxOverview(data) {
   amyraxSet('statUptime', amyraxDuration(data.uptime));
   amyraxSet('overviewNodes', nodes.length);
   updateAmyraxResources(system);
-  updateAmyraxWorkQueue(data.workQueue);
+  updateAmyraxNetwork(data.network);
   const singEnabled = Object.entries(enabled).some(([key, val]) => val && !['argo', 'vlessXhttp'].includes(key));
   [['engineSingbox', engines.singbox, singEnabled], ['engineXray', engines.xray, enabled.vlessXhttp], ['engineArgo', engines.argo, enabled.argo]].forEach(([id, running, configured]) => {
     const el = document.getElementById(id);
@@ -639,6 +648,34 @@ function updateAmyraxOverview(data) {
   }
   amyraxSet('protocolCount', grouped.size + ' نوع اتصال');
 }
+function updateAmyraxNetwork(report) {
+  if (!report) return;
+  amyraxSet('networkState', {pending:'در انتظار بررسی',ok:'بررسی سرور موفق',warning:'نیاز به بررسی',error:'اشکال در آدرس عمومی'}[report.state] || '—');
+  amyraxSet('networkSummary', report.message || '');
+  amyraxSet('networkEndpoint', report.endpoint || 'هنوز تنظیم نشده');
+  const list = document.getElementById('networkChecks');
+  if (list) {
+    list.replaceChildren();
+    for (const check of report.checks || []) {
+      const item = document.createElement('li');
+      item.dataset.state = check.state; item.textContent = check.message;
+      list.append(item);
+    }
+  }
+}
+let amyraxNetworkLoading = false;
+async function refreshAmyraxNetwork() {
+  if (amyraxNetworkLoading || navigator.onLine === false) return;
+  amyraxNetworkLoading = true;
+  const button = document.getElementById('checkNetwork');
+  if (button) button.disabled = true;
+  try {
+    const prefix = '/' + (location.pathname.split('/').filter(Boolean)[0] || 'amyrax');
+    updateAmyraxNetwork(await amyraxRequestJson(prefix + '/api/network', {timeoutMs:30000}));
+  } catch (_) { amyraxSet('networkSummary', 'گزارش دریافت نشد؛ اتصال را بررسی و دوباره تلاش کنید.'); }
+  finally { amyraxNetworkLoading = false; if (button) button.disabled = false; }
+}
+document.getElementById('checkNetwork')?.addEventListener('click', refreshAmyraxNetwork);
 function amyraxTraffic(data) {
   if(!data?.ok||!data.live)return;
   amyraxValue('overviewUp',data.live.upBps,true);amyraxValue('overviewDown',data.live.downBps,true);
@@ -666,7 +703,10 @@ function amyraxPageTitle(page) {
     if (link.dataset.page === page) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
   });
 }
+let amyraxOverviewLoading = false;
 async function amyraxRefresh() {
+  if (amyraxOverviewLoading || navigator.onLine === false) return;
+  amyraxOverviewLoading = true;
   const button = document.getElementById('refreshOverview');
   if (button) { button.disabled = true; button.classList.add('busy'); }
   try {
@@ -679,31 +719,11 @@ async function amyraxRefresh() {
     amyraxSet('connectionLabel', 'ارتباط قطع است');
     document.getElementById('connectionState')?.classList.add('offline');
     amyraxSet('overviewUpdated', 'دریافت وضعیت ناموفق بود؛ دوباره تلاش کنید.');
-  } finally { if (button) { button.disabled = false; button.classList.remove('busy'); } }
+  } finally { amyraxOverviewLoading = false; if (button) { button.disabled = false; button.classList.remove('busy'); } }
 }
 document.getElementById('refreshOverview')?.addEventListener('click', async () => { await amyraxRefresh(); window.dispatchEvent(new Event('amyrax-refresh')); });
 document.getElementById('drawerScrim')?.addEventListener('click', () => toggleDrawer(false));
-setInterval(() => { if (document.visibilityState === 'visible' && document.getElementById('viewHome')?.classList.contains('active')) amyraxRefresh(); }, 15000);
-
-function updateAmyraxWorkQueue(data) {
-  if (!data) return;
-  const fa = new Intl.NumberFormat('fa-IR');
-  amyraxSet('workQueueState', {normal:'فعال',busy:'کاهش ظرفیت',paused:'انتظار حافظه'}[data.pressure] || '—');
-  amyraxSet('workQueueActive', fa.format(data.active) + ' / ' + fa.format(data.capacity));
-  amyraxSet('workQueuePending', fa.format(data.pending) + ' / ' + fa.format(data.maxQueued));
-}
-let amyraxQueueLoading = false;
-async function refreshAmyraxWorkQueue() {
-  if (amyraxQueueLoading || document.visibilityState !== 'visible' || !document.getElementById('viewHome')?.classList.contains('active')) return;
-  amyraxQueueLoading = true;
-  try {
-    const base = '/' + (location.pathname.split('/').filter(Boolean)[0] || 'amyrax');
-    updateAmyraxWorkQueue(await amyraxRequestJson(base + '/api/work-queue',{timeoutMs:5000}));
-  } catch (_) { amyraxSet('workQueueState','وضعیت در دسترس نیست'); }
-  finally {amyraxQueueLoading = false;}
-}
-setInterval(refreshAmyraxWorkQueue,5000);
-window.addEventListener('amyrax-refresh',refreshAmyraxWorkQueue);
-window.addEventListener('hashchange',refreshAmyraxWorkQueue);
+setInterval(() => { if (document.visibilityState === 'visible' && document.getElementById('viewHome')?.classList.contains('active')) amyraxRefresh(); }, 30000);
+window.addEventListener('online', () => { amyraxRefresh(); });
 
 window.addEventListener("resize", () => toggleDrawer(false));

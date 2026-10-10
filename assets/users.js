@@ -108,7 +108,8 @@
   });
   $('userImportDialog').addEventListener('cancel',e=>{if(importBusy)e.preventDefault();});
   $('userImportDialog').addEventListener('close',()=>{if(!importBusy)clearImport();});
-  const active=()=>$('viewUsers').classList.contains('active')&&document.visibilityState==='visible';
+  const active=()=>navigator.onLine!==false&&$('viewUsers').classList.contains('active')&&document.visibilityState==='visible';
+  window.addEventListener('online',()=>{if(active())load();});
   window.addEventListener('hashchange',()=>{if(active())load();});window.addEventListener('amyrax-refresh',()=>{if(active())load();});
   setInterval(()=>{if(active()&&!$('userDialog').open&&!$('userActionDialog').open&&!$('userImportDialog').open&&!AmyraxControls.isOpen()&&!document.activeElement?.closest('.am-dropdown'))load(true);},5000);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{if(active())load();});else if(active())load();

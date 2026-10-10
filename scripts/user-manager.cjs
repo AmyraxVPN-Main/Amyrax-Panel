@@ -66,7 +66,7 @@ function createUserManagement({ LinkGenerator, Logger, AmyraxTraffic }) {
     }
     planImport(backup, reservedToken = '') {
       this.available();
-      if(!backup || backup.version!==1 || !Array.isArray(backup.users) || backup.users.length>2000) fail('فایل پشتیبان نسخهٔ ۱ و حداکثر ۲۰۰۰ کاربر لازم است.');
+      if(!backup || backup.version!==1 || !Array.isArray(backup.users)) fail('فایل پشتیبان نسخهٔ ۱ با فهرست کاربران لازم است.');
       const fields=['id','uuid','token','routeKey','name','note','enabled','limitGB','durationDays','startMode','resetDays','protocols','revision','createdAt','updatedAt','firstConnectedAt','lastConnectedAt','expiresAt','archivedAt','quotaStartedAt','up','down','lifetimeUp','lifetimeDown','history'];
       const inputIds=new Set(),inputKeys=new Set(),inputUUIDs=new Set();
       const records=backup.users.map((raw,index)=>{
@@ -107,7 +107,6 @@ function createUserManagement({ LinkGenerator, Logger, AmyraxTraffic }) {
         additions.push(u);rows.push({name:original,newName:u.name,action:u.name===original?'add':'rename'});
         ids.add(u.id);uuids.add(u.uuid);keys.add(u.token);keys.add(u.routeKey);names.add(u.name.toLowerCase());
       }
-      if(this.users.length+additions.length>2000)fail('مجموع کاربران پس از بازیابی بیشتر از ظرفیت ۲۰۰۰ حساب است.');
       const fingerprint=crypto.createHash('sha256').update(JSON.stringify({reservedToken,shared:this.stateManager.state.uuid,current:this.users.map(u=>[u.id,u.uuid,u.token,u.routeKey,u.name]),records})).digest('hex');
       return {additions,summary:{total:records.length,added:additions.length,skipped,renamed,rows,fingerprint}};
     }
@@ -136,7 +135,6 @@ function createUserManagement({ LinkGenerator, Logger, AmyraxTraffic }) {
     permitted(u) { return !this.storageError && ['active','pending'].includes(this.status(u)); }
     create(input) {
       this.available();
-      if (this.users.length >= 2000) fail('ظرفیت این فایل کاربران تکمیل شده است.',409);
       const fields = this.validate(input);
       if (!fields.name) fail('نام کاربر الزامی است.');
       const now = Date.now();

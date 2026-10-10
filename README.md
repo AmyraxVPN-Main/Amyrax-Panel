@@ -10,7 +10,7 @@
 <p>یک پنل فارسی برای ساخت کاربر، مدیریت حجم و اعتبار و تحویل اشتراک سازگار با اپ‌های مختلف.</p>
 
 <p>
-  <img src="docs/media/badge-version.svg" alt="نسخهٔ 1.11.4">
+  <img src="docs/media/badge-version.svg" alt="نسخهٔ 1.11.7">
   <img src="docs/media/badge-node.svg" alt="Node.js 18 یا جدیدتر">
   <a href="https://t.me/AmyraxVPN"><img src="docs/media/badge-channel.svg" alt="کانال تلگرام AmyraxVPN"></a>
   <a href="https://bot-hosting.net/"><img src="docs/media/badge-host.svg" alt="هاست استفاده‌شده در آموزش: Bot-Hosting"></a>

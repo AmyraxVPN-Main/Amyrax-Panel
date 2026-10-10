@@ -1,6 +1,6 @@
 {
   "name": "amyrax-panel",
-  "version": "1.11.4",
+  "version": "1.11.7",
   "description": "Amyrax Panel - multi-protocol proxy and web panel | https://t.me/AmyraxVPN",
   "main": "index.js",
   "scripts": {
