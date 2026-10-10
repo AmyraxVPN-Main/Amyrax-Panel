@@ -46,6 +46,14 @@ function createNetworkSupport({ axios, Logger }) {
     return name.length <= 253 && name.includes('.') && !/(^|\.)(localhost|local|internal|test|invalid|example|replit\.dev)$/.test(name)
       && name.split('.').every(part => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(part));
   };
+  function configuredOrigin(value, config = {}) {
+    const input = String(value || '').trim(), address = host(input);
+    if (!address || net.isIP(input)) return '';
+    const secure = config.forceHttps || edgeDomain(address);
+    const parsed = new URL(input.includes('://') ? input : (secure ? 'https://' : 'http://') + input);
+    if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password || parsed.search || parsed.hash || parsed.port === '0') throw Error('DOMAIN must be a hostname, IP or HTTP(S) address with a valid port and no credentials, query or fragment.');
+    return input.includes('://') || parsed.port || /:\d+(?:\/|$)/.test(input) ? parsed.origin : '';
+  }
   function origin(config, name) {
     const learned = config.learnedPublicOrigin;
     const related = learned && (host(name) === host(learned) || (config.forceHost && host(config.domain) === host(learned)));
@@ -157,7 +165,7 @@ function createNetworkSupport({ axios, Logger }) {
       const run = async () => {
         const checks = [];
         const add = (id, state, message, extra = {}) => checks.push({id,state,message,...extra});
-        if (!url || !publicHost(url.hostname)) add('endpoint','error','آدرس عمومی معتبر تنظیم نشده است؛ دامنهٔ فعال‌شده در Bot-Hosting یا IP و پورت تخصیص‌یافته را وارد کنید.');
+        if (!url || !publicHost(url.hostname)) add('endpoint','error','آدرس عمومی معتبر تنظیم نشده است؛ آدرس پایهٔ واقعی پنل در PUBLIC_BASE_URL یا IP و پورت ورودی تخصیص‌یافتهٔ میزبان را وارد کنید.');
         else {
           add('endpoint','ok','آدرس عمومی از نظر ساختار معتبر است.');
           try {
@@ -175,7 +183,7 @@ function createNetworkSupport({ axios, Logger }) {
             try {
               await (this.options.probe || probe)(url,used,challenge,this.proof(challenge),true);
               add('websocket','ok','ورودی WebSocket برای کانفیگ‌های WS در دسترس است.');
-            } catch (error) { add('websocket','warning',error.message); }
+            } catch (error) { add('websocket','warning',error.message + ' برای کانفیگ‌های WS، میزبان باید مسیر اتصال را با WebSocket عبور دهد؛ بازشدن پنل به‌تنهایی کافی نیست.'); }
           } catch (error) {
             const tlsError = /CERT|TLS|SSL|SELF_SIGNED|UNABLE_TO_VERIFY/.test(error.code || '');
             add(tlsError ? 'tls' : 'panel','error',tlsError ? 'گواهی HTTPS معتبر نیست یا با دامنه مطابقت ندارد؛ گواهی و دامنهٔ هاست را بررسی کنید.' : error.message,{code:error.code || 'NETWORK_ERROR'});
@@ -199,6 +207,6 @@ function createNetworkSupport({ axios, Logger }) {
       try { return await promise; } finally { if (this.pending?.promise === promise) this.pending = null; }
     }
   }
-  return {host,publicIp,publicHost,botDomain,edgeDomain,origin,linkEndpoint,discoverIp,Diagnostics,addresses,probe};
+  return {host,publicIp,publicHost,botDomain,edgeDomain,configuredOrigin,origin,linkEndpoint,discoverIp,Diagnostics,addresses,probe};
 }
 module.exports = createNetworkSupport;
