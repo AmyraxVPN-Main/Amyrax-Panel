@@ -39,7 +39,7 @@ for section, filename, factory in [
     readable = re.sub(r'^module\.exports = ' + factory + r';\s*$', '', (root / 'scripts' / filename).read_bytes().decode('utf-8'), flags=re.M)
     assert embedded == readable, filename
 
-files = [root / name for name in ['index.js','package.json','package-lock.json','Amyrax-Logo-Preview.png']]
+files = [root / name for name in ['index.js','package.json','package-lock.json','Dockerfile','.dockerignore','RAILWAY.md','Amyrax-Logo-Preview.png']]
 files += sorted(file for folder in ['assets','scripts'] for file in (root / folder).rglob('*') if file.is_file() and '__pycache__' not in file.parts)
 archive = root / f'Amyrax-Panel-v{version}.zip'
 with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as bundle:

@@ -7,6 +7,7 @@ function createTransportSupport({ Logger }) {
     ['vmess','httpupgrade',false,'vmessHttpUpgrade'],
     ['vless','xhttp',false,'vlessXhttp','packet-up'],
     ['shadowsocks','ws',false,'shadowsocks'],
+    ['vless','ws',false,'vlessWs'],
     ['vmess','ws',false,'vmessWs'],
     ['trojan','ws',false,'trojanWs'],
     ['trojan','httpupgrade',false,'trojanHttpUpgrade'],

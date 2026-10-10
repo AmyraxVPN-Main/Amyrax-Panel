@@ -1,0 +1,9 @@
+*
+!Dockerfile
+!package.json
+!package-lock.json
+!index.js
+!scripts/
+scripts/*
+!scripts/prepare-container.cjs
+!scripts/container-healthcheck.cjs
