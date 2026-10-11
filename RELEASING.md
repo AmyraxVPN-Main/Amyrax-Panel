@@ -1,5 +1,6 @@
 # Releases
 
+- Prepare changes and test packages locally. Do not push to GitHub or create a release until the user has tested this update and explicitly approves publication.
 - Write GitHub release notes in English: one short summary and up to four concise bullets, ideally under 100 words.
 - Describe the actual changes and relevant validation. Keep setup details in the guide.
 - Attach only `Amyrax-Panel-v<VERSION>.zip`, the installation package. Do not attach the separate `-GitHub.zip` source bundle.

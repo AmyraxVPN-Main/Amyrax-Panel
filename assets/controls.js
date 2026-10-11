@@ -208,6 +208,7 @@
   window.AmyraxControls = {
     menu: config => create({ ...config, menu: true }).root,
     sync,
+    enhance,
     isOpen: () => !!active,
     close: () => active?.close()
   };

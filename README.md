@@ -8,9 +8,10 @@
 <h3>اتصال ساده؛ مدیریت دقیق.</h3>
 
 <p>یک پنل فارسی برای ساخت کاربر، مدیریت حجم و اعتبار و تحویل اشتراک سازگار با اپ‌های مختلف.</p>
+<p dir="rtl">جدید: ساخت و ذخیرهٔ کانفیگ شخصی، خروجی Xray / sing-box و اتصال خروجی پنل به سرور دیگر؛ <a href="CONFIGS.md"><strong>راهنمای شخصی‌سازی ←</strong></a></p>
 
 <p>
-  <img src="docs/media/badge-version.svg" alt="نسخهٔ 1.11.9">
+  <img src="docs/media/badge-version.svg" alt="نسخهٔ 1.11.10">
   <img src="docs/media/badge-node.svg" alt="Node.js 18 یا جدیدتر">
   <a href="https://t.me/AmyraxVPN"><img src="docs/media/badge-channel.svg" alt="کانال تلگرام AmyraxVPN"></a>
   <a href="https://botkeep.cloud/"><img src="docs/media/badge-host.svg" alt="هاست پیشنهادی اصلی: Botkeep Cloud"></a>

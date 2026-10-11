@@ -1,4 +1,4 @@
-function createUserManagement({ LinkGenerator, Logger, AmyraxTraffic }) {
+function createUserManagement({ LinkGenerator, Logger, AmyraxTraffic, ConfigStudio }) {
   const fs = require('fs'), path = require('path'), crypto = require('crypto'), net = require('net');
   const { spawn, execFile } = require('child_process');
   const DAY = 86400000, GiB = 1073741824;
@@ -200,7 +200,7 @@ function createUserManagement({ LinkGenerator, Logger, AmyraxTraffic }) {
       const enable = Object.fromEntries(Object.keys(this.config.enable).map(k=>[k,false]));
       const groups={vless:['vlessWs','vlessWsTls','vlessHttpUpgrade','vlessHttpUpgradeTls','vlessGrpc','vlessGrpcTls','vlessXhttp','vlessXhttpTls','vlessXhttpStream','vlessXhttpStreamTls'],vmess:['vmessWs','vmessWsTls','vmessHttpUpgrade','vmessHttpUpgradeTls','vmessGrpc','vmessGrpcTls'],trojan:['trojanWs','trojanWsTls','trojanHttpUpgrade','trojanHttpUpgradeTls','trojanGrpc','trojanGrpcTls'],shadowsocks:['shadowsocks']};
       for(const [protocol,flags] of Object.entries(groups))for(const flag of flags)enable[flag]=u.protocols.includes(protocol)&&this.config.enable[flag];
-      const generator = new LinkGenerator({...this.config,enable,subscriptionName:u.name},{...this.stateManager.state,uuid:u.uuid,shadowsocksPassword:u.uuid},host);
+      const generator = new LinkGenerator({...this.config,enable,subscriptionName:u.name,profileAccountId:u.id},{...this.stateManager.state,uuid:u.uuid,shadowsocksPassword:u.uuid},host);
       return generator;
     }
     tick() {
@@ -253,7 +253,7 @@ function createUserManagement({ LinkGenerator, Logger, AmyraxTraffic }) {
           entries[p]={port,generation};inbounds.push({type:p,tag:u.id+'-'+p,listen:'127.0.0.1',listen_port:port,...(p==='shadowsocks'?{method:'aes-256-gcm',password:u.uuid,network:'tcp'}:{users:[{name:u.id,...(p==='trojan'?{password:u.uuid}:{uuid:u.uuid,...(p==='vmess'?{alterId:0}:{})})}]})});
         }targets.set(u.id,entries);}
         file=path.join(this.config.paths.dataDir,'users-engine-'+generation+'.json');
-        fs.writeFileSync(file,JSON.stringify({log:{level:'error',timestamp:true},inbounds,outbounds:[{type:'direct',tag:'direct'}],route:{final:'direct'}}),{mode:0o600});
+        fs.writeFileSync(file,JSON.stringify({log:{level:'error',timestamp:true},inbounds,...(ConfigStudio?ConfigStudio.singboxRoute(this.config):{outbounds:[{type:'direct',tag:'direct'}],route:{final:'direct'}})}),{mode:0o600});
         await new Promise((resolve,reject)=>{
           this.checkProcess=execFile(this.config.paths.singboxBin,['check','-c',file],{windowsHide:true,encoding:'utf8',timeout:15000,maxBuffer:256*1024},error=>{
             this.checkProcess=null;

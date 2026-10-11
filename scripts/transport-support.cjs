@@ -24,7 +24,7 @@ function createTransportSupport({ Logger }) {
       const tls = nativeTls || g.edgeTls;
       const kind = {vless:'VLESS',vmess:'VMess',trojan:'Trojan',shadowsocks:'Shadowsocks'}[protocol];
       const type = kind + '-' + {ws:'WS',httpupgrade:'HTTPUpgrade',grpc:'gRPC',xhttp:'XHTTP'}[transport] + (mode==='stream-up'?'-Stream':'') + (tls?'-TLS':'');
-      const name = type, wsHost = tls ? g.tlsOpt.wsHost : host;
+      const name = type, wsHost = g.customWsHost || (tls ? g.tlsOpt.wsHost : host);
       const alpn = [transport === 'grpc' || (transport==='xhttp'&&tls) ? 'h2' : 'http/1.1'];
       const password = protocol === 'shadowsocks' ? (g.state.shadowsocksPassword || g.state.uuid) : g.state.uuid;
       const ob = {type:protocol,tag:name,server:host,server_port:g.port,connect_timeout:'15s'};

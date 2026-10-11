@@ -98,11 +98,11 @@ function createTunnelGateway({ AmyraxTraffic }) {
       }
       return null;
     }
-    accept(stream, transport, tls = false, head = Buffer.alloc(0)) {
+    accept(stream, transport, tls = false, head = Buffer.alloc(0), accounts) {
       stream.on('error', () => stream.destroy());
       const timer = setTimeout(() => stream.destroy(), 10000); timer.unref();
       stream.once('close', () => clearTimeout(timer));
-      const candidates = this.candidates();
+      const candidates = this.candidates().filter(c=>!accounts||accounts.has(c.shared?'shared':c.id));
       let initial = Buffer.alloc(0);
       const sniff = chunk => {
         if (initial.length + chunk.length > 128 * 1024) { stream.destroy(); return; }
@@ -119,14 +119,15 @@ function createTunnelGateway({ AmyraxTraffic }) {
     handleUpgrade(req, socket, head) {
       let pathname;
       try { pathname = decodeURIComponent(String(req.url || '').split('?')[0]); } catch { pathname = ''; }
-      if (pathname !== tunnelPath || req.headers['sec-websocket-protocol']) {
+      const accounts = this.config.configStudio?.pathAccounts(pathname);
+      if ((pathname !== tunnelPath && !accounts?.size) || req.headers['sec-websocket-protocol']) {
         socket.end('HTTP/1.1 404 Not Found\r\nConnection: close\r\nContent-Length: 0\r\n\r\n'); return;
       }
       socket.setTimeout(0); socket.setNoDelay(true); socket.setKeepAlive(true, 10000);
       if (!req.headers['sec-websocket-key']) {
         if (req.method !== 'GET' || String(req.headers.upgrade).toLowerCase() !== 'websocket') { socket.destroy(); return; }
         socket.write('HTTP/1.1 101 Switching Protocols\r\nConnection: upgrade\r\nUpgrade: websocket\r\n\r\n');
-        this.accept(socket, 'HTTPUpgrade', Boolean(req.socket.encrypted), head);
+        this.accept(socket, 'HTTPUpgrade', Boolean(req.socket.encrypted), head, accounts);
         return;
       }
       this.wss.handleUpgrade(req, socket, head, ws => {
@@ -134,7 +135,7 @@ function createTunnelGateway({ AmyraxTraffic }) {
         this.watchHeartbeat(ws);
         stream.on('error', () => stream.destroy());
         ws.on('message', (_, binary) => { if (!binary) stream.destroy(); });
-        this.accept(stream, 'WS', Boolean(req.socket.encrypted));
+        this.accept(stream, 'WS', Boolean(req.socket.encrypted), Buffer.alloc(0), accounts);
       });
     }
     watchHeartbeat(ws) {

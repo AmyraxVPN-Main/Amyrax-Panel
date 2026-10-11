@@ -210,6 +210,8 @@ function handleRouting() {
     validPage = 'subs';
   } else if (page === 'nodes' || page === 'node') {
     validPage = 'nodes';
+  } else if (page === 'studio') {
+    validPage = 'studio';
   } else if (page === 'users') {
     validPage = 'users';
   } else if (page === 'usage' || page === 'traffic') {
@@ -224,6 +226,7 @@ function handleRouting() {
   if (validPage === 'subs') targetViewId = 'viewSubs';
   else if (validPage === 'nodes') targetViewId = 'viewNodes';
   else if (validPage === 'usage') targetViewId = 'viewUsage';
+  else if (validPage === 'studio') targetViewId = 'viewStudio';
   else if (validPage === 'users') targetViewId = 'viewUsers';
 
   const targetView = document.getElementById(targetViewId);
@@ -390,6 +393,7 @@ function renderNodes(nodes, locationStr) {
             <button type="button" class="action-icon-button" data-action="qr-text" data-text="${encodedUri}" data-title="${encodedTitle}" aria-label="کد QR ${escapeHtml(node.name || node.type)}" title="نمایش کد QR"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z"/></svg></button>
             <button type="button" class="action-icon-button" data-action="copy-text" data-text="${encodedUri}" aria-label="کپی ${escapeHtml(node.name || node.type)}" title="کپی لینک"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
           </span>
+          <span class="studio-actions">${node.xrayJson ? `<button type="button" class="studio-button" data-action="copy-text" data-text="${encodeURIComponent(node.xrayJson)}">Xray ↗</button>` : ''}${node.singboxJson ? `<button type="button" class="studio-button" data-action="copy-text" data-text="${encodeURIComponent(node.singboxJson)}">sing-box ↗</button>` : ''}</span>
           ${node.wgConf ? `
             <a href="/amyrax/wg.conf" download="wg0.conf" class="btn-node-dl" title="Download WireGuard Profile">
               <span>.conf</span>
@@ -694,6 +698,7 @@ function amyraxPageTitle(page) {
     home: ['نمای کلی پنل', 'وضعیت اتصال، سرویس‌ها و مصرف ترافیک؛ همه در یک نگاه.', 'نمای کلی'],
     subs: ['لینک‌های اشتراک', 'یک لینک برای وارد کردن همهٔ کانفیگ‌ها در برنامهٔ دلخواه شما.', 'اشتراک‌ها'],
     nodes: ['کانفیگ‌های اتصال', 'کانفیگ دلخواه را انتخاب کنید، کپی کنید یا کد QR آن را اسکن کنید.', 'کانفیگ‌ها'],
+    studio: ['شخصی‌سازی اتصال', 'کانفیگ پیشرفته بسازید، در اشتراک ذخیره کنید یا خروجی پنل را به سرور دیگر متصل کنید.', 'شخصی‌سازی'],
     users: ['مدیریت کاربران', 'ساخت اشتراک مستقل، تعیین حجم و زمان و پیگیری مصرف هر کاربر.', 'کاربران'],
     usage: ['مصرف ترافیک', 'مصرف امروز، این ماه و جزئیات ترافیک هر پروتکل را دنبال کنید.', 'ترافیک']
   };

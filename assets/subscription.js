@@ -73,19 +73,20 @@
   document.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => button.dataset.action.startsWith('qr-sub') ? qr(data.url, 'لینک اشتراک', button.dataset.action === 'qr-sub-detail') : copy(data.url)));
 
   function selectTab(name, focus = false) {
-    for (const id of ['apps', 'configs']) {
+    for (const id of ['apps', 'configs', 'studio']) {
       const active = id === name;
       $(id + 'Tab').setAttribute('aria-selected', String(active)); $(id + 'Tab').tabIndex = active ? 0 : -1;
       $(id + 'Panel').hidden = !active;
     }
+    if (name === 'studio') window.dispatchEvent(new Event('amyrax-studio-open'));
     if (focus) $(name + 'Tab').focus();
   }
-  for (const name of ['apps', 'configs']) {
+  for (const name of ['apps', 'configs', 'studio']) {
     $(name + 'Tab').addEventListener('click', () => selectTab(name));
     $(name + 'Tab').addEventListener('keydown', event => {
       if (event.ctrlKey || event.metaKey || event.altKey) return;
       if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
-        event.preventDefault(); selectTab(event.key === 'Home' ? 'apps' : event.key === 'End' ? 'configs' : name === 'apps' ? 'configs' : 'apps', true);
+        event.preventDefault(); const tabs=['apps','configs','studio'];selectTab(tabs[event.key==='Home'?0:event.key==='End'?2:(tabs.indexOf(name)+(event.key==='ArrowLeft'?1:2))%3],true);
       }
     });
   }
@@ -280,6 +281,7 @@
       if (node.wgConf) {
         const wgCopy = el('button', 'soft-button wg-copy', 'کپی فایل WireGuard'); wgCopy.type = 'button'; wgCopy.addEventListener('click', () => copy(node.wgConf)); content.append(wgCopy);
       }
+      const exports=el('div','studio-actions');for(const [key,caption] of [['xrayJson','Xray ↗'],['singboxJson','sing-box ↗']])if(node[key]){const b=el('button','studio-button',caption);b.type='button';b.addEventListener('click',()=>copy(node[key]));exports.append(b);}content.append(exports);
       $('configList').append(row);
     }
     if (!nodes.length) $('configList').append(el('p', 'empty', query ? 'کانفیگی با این مشخصات پیدا نشد.' : 'هنوز کانفیگی در دسترس نیست.'));
@@ -430,6 +432,8 @@
     if (refreshing) refreshAfterResume = true;
     else scheduleRefresh(500);
   }
+  window.addEventListener('amyrax-configs-changed',()=>refresh(true));
+  window.addEventListener('amyrax-studio-qr',event=>qr(event.detail.uri,event.detail.name));
   function pauseRefresh() { clearTimeout(refreshTimer); refreshController?.abort(); }
   document.addEventListener('visibilitychange', () => { if (canRefresh()) resumeRefresh(); else pauseRefresh(); });
   window.addEventListener('offline', () => { pauseRefresh(); connectionStatus('اینترنت قطع است؛ اطلاعات آخرین دریافت نمایش داده می‌شود.'); });
