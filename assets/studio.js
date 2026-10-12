@@ -1,8 +1,8 @@
 (() => {
   const el = (tag, cls, value) => { const e = document.createElement(tag); if (cls) e.className = cls; if (value !== undefined) e.textContent = value; return e; };
-  function init(root, base, subscriber = false) {
+  function init(root, base) {
     if (!root || root.dataset.studioReady) return; root.dataset.studioReady = 'true';
-    let data = null, editing = null, result = null, loading = false, mutating = false, loaded = false;
+    let data = null, editing = null, result = null, loading = false, mutating = false;
     root.classList.add('studio-shell');
     const intro = el('div', 'studio-intro'), introCopy = el('div'); introCopy.append(el('h2', '', 'کانفیگ، به سبک شما'), el('p', '', 'کانفیگ‌های خودکار آماده‌اند. اینجا یک اتصال شخصی بسازید و به همان اشتراک اضافه کنید.')); intro.append(introCopy, el('span', 'studio-badge', 'CONFIG STUDIO')); root.append(intro);
     const error = el('div', 'studio-message'); error.hidden = true; error.setAttribute('role', 'alert'); root.append(error);
@@ -11,12 +11,12 @@
     const fields = {}, field = (key, caption, type, parent = grid, options, help = '') => {
       const wrapper = el('label', 'studio-field' + (key === 'name' || key === 'variant' || key === 'accountId' ? ' full' : '')); wrapper.append(el('span', '', caption));
       const input = el(type === 'select' ? 'select' : 'input'); if (type !== 'select') input.type = type;
-      input.id = (subscriber ? 'sub' : 'admin') + '-studio-' + key; input.name = key; input.autocomplete = 'off';
+      input.id = 'admin-studio-' + key; input.name = key; input.autocomplete = 'off';
       if (type === 'select') for (const [value, name] of options || []) { const o = el('option', '', name); o.value = value; input.append(o); }
       if (['server', 'port', 'host', 'sni', 'path'].includes(key)) input.dir = 'ltr';
       if (type === 'checkbox') wrapper.classList.add('studio-check'); wrapper.append(input); if (help) wrapper.append(el('small', '', help)); parent.append(wrapper); fields[key] = input; return input;
     };
-    field('accountId', 'حساب اتصال', 'select').parentElement.hidden = subscriber;
+    field('accountId', 'حساب اتصال', 'select');
     field('name', 'نام کانفیگ', 'text').required = true; fields.name.maxLength = 80;
     field('variant', 'پروتکل و انتقال فعال', 'select').required = true;
     field('enabled', 'نمایش در لیست و اشتراک', 'checkbox').checked = true;
@@ -27,13 +27,13 @@
     field('sni', 'SNI (اختیاری)', 'text', advancedGrid, null, 'باید با دامنه و گواهی سرور سازگار باشد.');
     field('fingerprint', 'اثر انگشت TLS', 'select', advancedGrid, [['chrome','Chrome'],['firefox','Firefox'],['safari','Safari'],['edge','Edge'],['ios','iOS'],['android','Android'],['randomized','Randomized'],['random','Random'],['360','360'],['qq','QQ'],['','بدون اثر انگشت']]);
     const actions = el('div', 'studio-actions'), preview = el('button', 'studio-button', 'پیش‌نمایش'), save = el('button', 'studio-button primary', 'ذخیره و افزودن به ساب'), cancel = el('button', 'studio-button', 'کانفیگ جدید'); preview.type = cancel.type = 'button'; save.type = 'submit'; cancel.hidden = true; actions.append(preview, save, cancel);
-    const output = el('div', 'studio-result'); output.hidden = true; const outputSelect = el('select'), text = el('textarea', 'studio-output'); outputSelect.id=(subscriber?'sub':'admin')+'-studio-output'; text.readOnly = true; text.setAttribute('aria-label', 'خروجی کانفیگ');
+    const output = el('div', 'studio-result'); output.hidden = true; const outputSelect = el('select'), text = el('textarea', 'studio-output'); outputSelect.id='admin-studio-output'; text.readOnly = true; text.setAttribute('aria-label', 'خروجی کانفیگ');
     for (const [value, caption] of [['uri','لینک اتصال'],['xrayJson','Outbound · Xray'],['singboxJson','Outbound · sing-box']]) { const o = el('option', '', caption); o.value = value; outputSelect.append(o); } outputSelect.setAttribute('aria-label', 'قالب خروجی');
     const outputActions = el('div', 'studio-actions'), copy = el('button', 'studio-button', 'کپی خروجی'), download = el('button', 'studio-button', 'دانلود خروجی'), qr = el('button', 'studio-button', 'QR'); copy.type = download.type = qr.type = 'button'; outputActions.append(copy, download, qr); output.append(el('h3', '', 'خروجی آماده'), outputSelect, text, outputActions);
     form.append(formTitle, grid, advanced, actions); editor.append(form, output); saved.append(el('h3', '', 'کانفیگ‌های شخصی شما'), el('p', '', 'هر مورد فعال با مشخصات همان حساب، کنار کانفیگ‌های خودکار به اشتراک اضافه می‌شود. خاموش‌کردن این مورد، حساب را غیرفعال نمی‌کند.')); const list = el('div', 'studio-list'); saved.append(list); layout.append(editor, saved); root.append(layout);
     async function request(suffix = '', method = 'GET', body) {
       const options = { method, cache:'no-store', credentials:'same-origin', headers:method === 'GET' ? {} : {'Content-Type':'application/json','X-Amyrax-Req':'1'}, ...(body ? {body:JSON.stringify(body)} : {}) };
-      if (window.amyraxRequestJson && !subscriber) return amyraxRequestJson(base + suffix, {...options,timeoutMs:120000});
+      if (window.amyraxRequestJson) return amyraxRequestJson(base + suffix, {...options,timeoutMs:120000});
       const controller = new AbortController(), timer = setTimeout(()=>controller.abort(),120000);
       try { const response = await fetch(base + suffix, {...options,signal:controller.signal}); const value = await response.json(); if (!response.ok || !value.ok) throw new Error(value.error || 'دریافت اطلاعات ناموفق بود.'); return value; }
       finally { clearTimeout(timer); }
@@ -57,23 +57,23 @@
     }
     async function load(preserve = false) {
       if (loading) return; loading = true;
-      try { data = await request(subscriber ? '' : '?accountId=' + encodeURIComponent(fields.accountId.value || 'shared')); loaded = true;
+      try { data = await request('?accountId=' + encodeURIComponent(fields.accountId.value || 'shared'));
         fields.accountId.replaceChildren(); for(const a of data.accounts || [{id:data.accountId,name:'حساب شما'}]) {const o=el('option','',a.name);o.value=a.id;fields.accountId.append(o);}fields.accountId.value=data.accountId;
         const current=fields.variant.value; fields.variant.replaceChildren();for(const o of data.options){const opt=el('option','',o.value);opt.value=o.value;fields.variant.append(opt);}if(data.options.some(o=>o.value===current))fields.variant.value=current;
         for(const key of ['server','port','host','sni','path']) fields[key].placeholder=String(data.defaults[key]);
-        [fields.accountId,fields.variant,fields.fingerprint,outputSelect].forEach(enhance); renderList(); if(!preserve)edit(); if(!subscriber)renderEgress(); preview.disabled=save.disabled=!data.options.length;
+        [fields.accountId,fields.variant,fields.fingerprint,outputSelect].forEach(enhance); renderList(); if(!preserve)edit(); renderEgress(); preview.disabled=save.disabled=!data.options.length;
       } catch(e){message(e.message);} finally {loading=false;}
     }
     async function run(task) { if(mutating)return;mutating=true;root.querySelectorAll('button').forEach(b=>b.disabled=true);message('');try{await task();}catch(e){message(e.message);}finally{mutating=false;root.querySelectorAll('button').forEach(b=>b.disabled=false);updateOutput();settings();[fields.accountId,fields.variant,fields.fingerprint].forEach(sync);preview.disabled=save.disabled=!data?.options.length;list.querySelectorAll('[data-unavailable]').forEach(b=>b.disabled=true);} }
-    const changed = () => { window.dispatchEvent(new Event('amyrax-configs-changed')); if(!subscriber)window.amyraxRefresh?.(); };
+    const changed = () => { window.dispatchEvent(new Event('amyrax-configs-changed')); window.amyraxRefresh?.(); };
     preview.addEventListener('click',()=>{if(form.reportValidity())run(async()=>{showResult((await request('/preview','POST',collect())).node);message('پیش‌نمایش آماده است؛ برای فعال‌شدن مسیر و اضافه‌شدن به اشتراک، ذخیره کنید.',true);});});
     form.addEventListener('submit',e=>{e.preventDefault();run(async()=>{await request('/profiles'+(editing?'/'+editing.id:''),editing?'PATCH':'POST',collect());await load();edit();changed();message('کانفیگ ذخیره شد و در اشتراک همان حساب قرار گرفت.',true);});});
     cancel.addEventListener('click',()=>edit());fields.accountId.addEventListener('change',()=>load());fields.variant.addEventListener('change',settings);outputSelect.addEventListener('change',updateOutput);
-    copy.addEventListener('click',async()=>{try{if(window.copyTextToClipboard&&!subscriber)await copyTextToClipboard(text.value);else{await navigator.clipboard.writeText(text.value);message('خروجی کپی شد.',true);}}catch{message('کپی خودکار ممکن نشد؛ متن خروجی را انتخاب و کپی کنید.');text.select();}});
+    copy.addEventListener('click',async()=>{try{if(window.copyTextToClipboard)await copyTextToClipboard(text.value);else{await navigator.clipboard.writeText(text.value);message('خروجی کپی شد.',true);}}catch{message('کپی خودکار ممکن نشد؛ متن خروجی را انتخاب و کپی کنید.');text.select();}});
     download.addEventListener('click',()=>{const blob=new Blob([text.value],{type:outputSelect.value==='uri'?'text/plain':'application/json'}),url=URL.createObjectURL(blob),a=el('a');a.href=url;a.download='Amyrax-'+(outputSelect.value==='uri'?'config.txt':outputSelect.value==='xrayJson'?'Xray-outbound.json':'SingBox-outbounds.json');a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
-    qr.addEventListener('click',()=>{if(!subscriber&&window.openQr)openQr(result.uri,result.name);else window.dispatchEvent(new CustomEvent('amyrax-studio-qr',{detail:result}));});
+    qr.addEventListener('click',()=>{window.openQr?.(result.uri,result.name);});
     let egress, egressName, egressInput, egressEnabled, egressState, apply;
-    if(!subscriber){
+    {
       egress=el('section','studio-card studio-egress');egress.append(el('h3','','اتصال خروجی پنل'),el('p','','برای عبور ترافیک VPN این پنل از سرور دیگر، لینک اتصال یا یک Outbound استاندارد Xray وارد کنید. بررسی، ساختار تنظیمات را تأیید می‌کند. اعمال تغییر، پنل را یک‌بار راه‌اندازی مجدد می‌کند و اتصال‌های فعلی لحظه‌ای قطع می‌شوند.'));
       egressState=el('p');egress.append(egressState);const egGrid=el('div','studio-grid');
       const ef=(caption,input)=>{const l=el('label','studio-field full');l.append(el('span','',caption),input);egGrid.append(l);return input;};
@@ -89,10 +89,9 @@
     }
     function renderEgress(){if(!egress)return;const e=data.egress;egressEnabled.checked=e.enabled;egressName.value=e.name||'';egressInput.value=e.input||'';egressState.textContent='وضعیت فعلی: '+(e.active?'عبور از '+e.activeName:'اتصال مستقیم')+(e.restartRequired?' · تغییرات در انتظار اعمال':'');apply.hidden=!e.restartRequired;}
     root.addEventListener('input',e=>{if(form.contains(e.target)){output.hidden=true;result=null;}});
-    function visible(){return document.visibilityState==='visible'&&(subscriber?!root.hidden:document.getElementById('viewStudio')?.classList.contains('active'));}
-    window.addEventListener('hashchange',()=>{if(visible())load();});window.addEventListener('amyrax-refresh',()=>{if(visible())load(true);});window.addEventListener('amyrax-studio-open',()=>{if(!loaded)load();});if(visible())load();
+    function visible(){return document.visibilityState==='visible'&&document.getElementById('viewStudio')?.classList.contains('active');}
+    window.addEventListener('hashchange',()=>{if(visible())load();});window.addEventListener('amyrax-refresh',()=>{if(visible())load(true);});if(visible())load();
   }
   window.AmyraxStudio={init};
   const admin=document.getElementById('studioRoot');if(admin)init(admin,'/'+(location.pathname.split('/').filter(Boolean)[0]||'amyrax')+'/api/studio');
-  const subscription=document.getElementById('subscriptionStudio');if(subscription){try{const data=JSON.parse(document.getElementById('subscriptionData').textContent);if(data.studioUrl)init(subscription,data.studioUrl,true);}catch{}}
 })();

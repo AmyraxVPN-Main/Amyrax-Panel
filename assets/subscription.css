@@ -238,3 +238,5 @@ dialog::backdrop{background:#02060aa8;backdrop-filter:blur(12px);-webkit-backdro
 }
 
 .bar-value{white-space:normal;overflow-wrap:anywhere;text-align:center;max-width:100%;font-size:10px;line-height:1.35;direction:ltr}
+
+.outbound-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.outbound-actions .soft-button{font-size:11px;padding:7px 10px;min-height:36px}

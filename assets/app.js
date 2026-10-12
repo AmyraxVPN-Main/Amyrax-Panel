@@ -532,52 +532,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);else load();
 })();
 
-(function () {
-  const btn = document.getElementById('updateBtn');
-  if (!btn) return;
-  const API = '/' + (window.location.pathname.split('/').filter(Boolean)[0] || 'amyrax') + '/api/update';
-  let info = null;
-  async function call(method) {
-    btn.classList.add('busy');
-    try {
-      return await amyraxRequestJson(API, { method, headers: { 'X-Amyrax-Req': '1' } });
-    } finally { btn.classList.remove('busy'); }
-  }
-  async function check(quiet) {
-    try {
-      info = await call('GET');
-      if (info.disabled) { btn.remove(); return; }
-      btn.classList.toggle('has-update', !!info.newer);
-      btn.title = info.newer ? 'Update to ' + info.latest + ' (you have v' + info.current + ')' : 'v' + info.current + ' - up to date, click to check again';
-      btn.setAttribute('aria-label', btn.title);
-      if (!quiet) showToast(info.newer ? 'New release: ' + info.latest : info.latest ? 'You are on the latest release' : 'No GitHub release published yet');
-    } catch (e) { if (!quiet) showToast('Update check failed: ' + e.message); }
-  }
-  async function apply() {
-    const how = info.mode === 'fork'
-      ? 'Your GitHub fork is synced and Railway redeploys (about 1-2 minutes).'
-      : 'The panel downloads it from GitHub and restarts (about 30 seconds).';
-    if (!confirm('Update to ' + info.latest + '?\n' + how)) return;
-    try {
-      await call('POST');
-    } catch (e) { showToast('Update failed: ' + e.message); return; }
-    showToast('Updating to ' + info.latest + ' - the page reloads when it is back');
-    btn.disabled = true;
-    btn.classList.add('busy');
-    const until = Date.now() + 5 * 60000;
-    const poll = async () => {
-      try {
-        const d = await amyraxRequestJson(API);
-        if (!d.newer) return location.reload();
-      } catch (_) {}
-      if (Date.now() < until) setTimeout(poll, 4000); else location.reload();
-    };
-    setTimeout(poll, 5000);
-  }
-  btn.addEventListener('click', () => (info && info.newer ? apply() : check(false)));
-  check(true);
-})();
-
 const amyraxSet = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
 function amyraxBytes(value, speed = false) {
   if(value===null||value===undefined||!Number.isFinite(Number(value)))return '—';

@@ -12,6 +12,7 @@ assert lock['version'] == lock['packages']['']['version'] == version
 for token in ['WORK_TIMEOUT', 'WORK_FULL', 'createWorkQueue', 'workQueue', 'AMYRAX_WORK_', 'importInFlight']:
     assert token not in source, token
 for key, filename in {
+    'updatesJs':'updates.js','updatesCss':'updates.css',
     'studioJs':'studio.js','studioCss':'studio.css',
     'controlsJs':'controls.js', 'controlsCss':'controls.css',
     'usersJs':'users.js', 'usersCss':'users.css', 'indexHtml':'index.html',
@@ -22,6 +23,7 @@ for key, filename in {
     match = re.search(r'^  ' + key + r': (".*"),?\r?$', source, re.M)
     assert match and json.loads(match[1]) == (root / 'assets' / filename).read_bytes().decode('utf-8'), filename
 for section, filename, factory in [
+    ('PANEL UPDATES','panel-updates.cjs','createPanelUpdates'),
     ('CONFIG STUDIO','config-studio.cjs','createConfigStudio'),
     ('NETWORK SUPPORT','network-support.cjs','createNetworkSupport'),
     ('TRANSPORT SUPPORT','transport-support.cjs','createTransportSupport'),
@@ -41,7 +43,7 @@ for section, filename, factory in [
     readable = re.sub(r'^module\.exports = ' + factory + r';\s*$', '', (root / 'scripts' / filename).read_bytes().decode('utf-8'), flags=re.M)
     assert embedded == readable, filename
 
-files = [root / name for name in ['index.js','package.json','package-lock.json','Dockerfile','.dockerignore','RAILWAY.md','CONFIGS.md','Amyrax-Logo-Preview.png']]
+files = [root / name for name in ['index.js','package.json','package-lock.json','Dockerfile','.dockerignore','RAILWAY.md','CONFIGS.md','UPDATES.md','Amyrax-Logo-Preview.png']]
 files += sorted(file for folder in ['assets','scripts'] for file in (root / folder).rglob('*') if file.is_file() and '__pycache__' not in file.parts)
 archive = root / f'Amyrax-Panel-v{version}.zip'
 with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as bundle:

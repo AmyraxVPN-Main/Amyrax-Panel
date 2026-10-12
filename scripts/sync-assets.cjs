@@ -16,6 +16,7 @@ const subscriptionCss = fs.readFileSync(cssPath, 'utf8');
 if (!iconSection.test(subscriptionCss)) throw new Error('Client icon section is missing');
 fs.writeFileSync(cssPath, subscriptionCss.replace(iconSection, () => '/* BEGIN CLIENT ICONS */\n' + iconRules + '\n/* END CLIENT ICONS */'));
 const assets = {
+  updatesJs:['updates.js','utf8'], updatesCss:['updates.css','utf8'],
   studioJs:['studio.js','utf8'], studioCss:['studio.css','utf8'],
   subscriptionHtml: ['subscription.html', 'utf8'],
   subscriptionCss: ['subscription.css', 'utf8'],
@@ -50,7 +51,7 @@ const userRuntime = fs.readFileSync(path.join(root, 'scripts/user-manager.cjs'),
 const upgradeRuntime = fs.readFileSync(path.join(root,'scripts/upgrade-support.cjs'),'utf8').replace(/^module\.exports = createUpgradeSupport;\s*$/m,'');
 source = source.replace(/\/\/ BEGIN UPGRADE SUPPORT[\s\S]*?\/\/ END UPGRADE SUPPORT/, () => '// BEGIN UPGRADE SUPPORT\n'+upgradeRuntime+'\n// END UPGRADE SUPPORT');
 source = source.replace(/\/\/ BEGIN USER MANAGEMENT[\s\S]*?\/\/ END USER MANAGEMENT/, () => '// BEGIN USER MANAGEMENT\n' + userRuntime + '\n// END USER MANAGEMENT');
-for (const [section, file, factory] of [['CONFIG STUDIO','config-studio.cjs','createConfigStudio'],['NETWORK SUPPORT','network-support.cjs','createNetworkSupport'],['TRANSPORT SUPPORT','transport-support.cjs','createTransportSupport'],['NODE PRESENTATION','node-presentation.cjs','createNodePresentation'],['TUNNEL GATEWAY','tunnel-gateway.cjs','createTunnelGateway'],['TRAFFIC METER','traffic-meter.cjs','createTrafficMeter'],['SYSTEM METRICS','system-metrics.cjs','createSystemMetrics']]) {
+for (const [section, file, factory] of [['PANEL UPDATES','panel-updates.cjs','createPanelUpdates'],['CONFIG STUDIO','config-studio.cjs','createConfigStudio'],['NETWORK SUPPORT','network-support.cjs','createNetworkSupport'],['TRANSPORT SUPPORT','transport-support.cjs','createTransportSupport'],['NODE PRESENTATION','node-presentation.cjs','createNodePresentation'],['TUNNEL GATEWAY','tunnel-gateway.cjs','createTunnelGateway'],['TRAFFIC METER','traffic-meter.cjs','createTrafficMeter'],['SYSTEM METRICS','system-metrics.cjs','createSystemMetrics']]) {
   const runtime=fs.readFileSync(path.join(root,'scripts',file),'utf8').replace('module.exports = '+factory+';', '');
   const pattern=new RegExp('// BEGIN '+section+'[\\s\\S]*?// END '+section);
   if(!pattern.test(source))throw new Error('Missing runtime section: '+section);
